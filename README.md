@@ -1,9 +1,86 @@
-# Datacrazy CRM — App Mobile
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/datacrazy-logo-dark.svg">
+  <img src="docs/brand/datacrazy-logo-light.svg" alt="Datacrazy" width="200">
+</picture>
+
+<br /><br />
+
+## CRM Mobile — Desafio Dev Mobile 2026
 
 App mobile (React Native + Expo) desenvolvido em resposta ao **Desafio Dev
-Mobile 2026** da Datacrazy. Contexto completo do desafio, decisões e
-justificativas em [`context.md`](./context.md); tokens de design em
-[`src/theme.ts`](./src/theme.ts).
+Mobile 2026** da Datacrazy: trazer a experiência de Pipeline em Kanban — hoje
+só existe na versão web — para o app, e reduzir a distância entre o mobile e
+o CRM web em métricas, leads e multiatendimento.
+
+[![Expo](https://img.shields.io/badge/Expo-SDK%2057-000020?logo=expo&logoColor=white)](https://expo.dev)
+[![React Native](https://img.shields.io/badge/React%20Native-0.86-20232A?logo=react&logoColor=61DAFB)](https://reactnative.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Reanimated](https://img.shields.io/badge/react--native--reanimated-worklets-9B8CFF)](https://docs.swmansion.com/react-native-reanimated/)
+
+[Board do projeto](https://github.com/users/antoniocristovam/projects/1) ·
+[Issues](https://github.com/antoniocristovam/crm-datacrazy/issues) ·
+[Contexto completo](./context.md)
+
+</div>
+
+---
+
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/pipelines.png" width="260" alt="Pipeline em Kanban"><br />
+      <sub><b>Pipelines</b> — Kanban novo, drag-and-drop entre colunas</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/home.png" width="260" alt="Dashboard"><br />
+      <sub><b>Início</b> — métricas, gráfico e rankings</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/leads.png" width="260" alt="Leads"><br />
+      <sub><b>Leads</b> — ticket médio, ciclo e última compra</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/conversas.png" width="260" alt="Conversas"><br />
+      <sub><b>Conversas</b> — multiatendimento com fila offline</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/screenshots/perfil.png" width="260" alt="Perfil"><br />
+      <sub><b>Perfil</b> — push, Automações e Impulsos (leitura)</sub>
+    </td>
+    <td align="center" width="33%">
+      <sub>Tema escuro aplicado a partir de<br /><code>src/theme.ts</code> em todas as telas.</sub>
+    </td>
+  </tr>
+</table>
+
+> Capturas tiradas do preview web do próprio app (`npm run web`) — o
+> comportamento de arrastar os cards do Kanban só dá pra sentir de verdade no
+> dispositivo (toque real), veja a seção [Rodando localmente](#rodando-localmente).
+
+## Destaque: Pipeline em Kanban
+
+A lacuna mais crítica identificada entre o app publicado e o CRM web — uso
+diário direto do vendedor — não existia no mobile. Implementada em
+[`PipelineScreen.tsx`](./src/screens/PipelineScreen.tsx):
+
+- Colunas roláveis horizontalmente (~78% da largura da tela, com snap).
+- Cards arrastáveis **entre colunas**, com `Gesture.Pan().activateAfterLongPress(150)`.
+- Todo o gesto roda em **worklets** (`react-native-reanimated`) — posição do
+  card fantasma e detecção de coluna sob o dedo não fazem round-trip para o
+  JS thread a cada frame.
+- Colunas medidas via `onLayout` + `measureInWindow`; o scroll (horizontal
+  das colunas e vertical de cada coluna) fica travado durante o arraste para
+  manter essas medições válidas.
+- Ao soltar: atualização **otimista** do estado local e chamada a
+  `updateDealStage` (mock em [`src/api/deals.ts`](./src/api/deals.ts),
+  documentado para plugar o `PATCH /deals/{id}/stage` real). Se a chamada
+  falhar, a mudança é revertida automaticamente com um toast de erro.
 
 ## Stack
 
@@ -11,14 +88,12 @@ justificativas em [`context.md`](./context.md); tokens de design em
 - **React Navigation** (bottom tabs) — 5 abas: Início, Leads, Pipelines,
   Conversas, Perfil.
 - **react-native-gesture-handler + react-native-reanimated** — drag-and-drop
-  do Kanban rodando na UI thread (worklets), sem round-trip para o JS a cada
-  frame de gesto.
+  do Kanban.
 - **expo-haptics** — feedback tátil ao pegar/soltar um card e no
   sucesso/erro da mudança de etapa.
 - Sem backend real ainda: dados em [`src/data/mock.ts`](./src/data/mock.ts) e
   chamada de API do pipeline isolada em
-  [`src/api/deals.ts`](./src/api/deals.ts) (mock com comentário indicando
-  onde plugar o `PATCH /deals/{id}/stage` real).
+  [`src/api/deals.ts`](./src/api/deals.ts).
 
 ## Estrutura
 
@@ -39,6 +114,9 @@ src/
     PipelineScreen.tsx      # Kanban arrastável (aba "Pipelines", nova)
     ConversationsScreen.tsx  # Multiatendimento com indicador de fila offline
     ProfileScreen.tsx         # Perfil + Automações/Impulsos (somente leitura) + push
+docs/
+  brand/                  # logo oficial Datacrazy (claro/escuro)
+  screenshots/             # capturas usadas neste README
 ```
 
 ## Rodando localmente
@@ -119,30 +197,17 @@ Notas:
 - `applicationId`/`bundleIdentifier` já configurados como `com.datacrazy.crm`
   em [`app.json`](./app.json); ajuste para o identificador real da Datacrazy
   antes de publicar nas lojas.
-- Os ícones em `assets/` são os placeholders padrão do template Expo —
-  trocar por artes finais da marca antes de gerar o build de produção.
+- Os ícones em `assets/` (fora da logo em `docs/brand/`) ainda são os
+  placeholders padrão do template Expo — trocar por artes finais da marca
+  antes de gerar o build de produção.
 
-## Pipeline Kanban — como o drag-and-drop funciona
+## Backlog e roadmap
 
-Implementado em [`PipelineScreen.tsx`](./src/screens/PipelineScreen.tsx),
-seguindo a especificação em `context.md`:
-
-- Colunas roláveis horizontalmente (~78% da largura da tela, com snap).
-- Cada card usa `Gesture.Pan().activateAfterLongPress(150)` — segura por
-  150ms para "pegar" o card (evita conflito com o scroll da lista).
-- Toda a lógica de arraste (posição do card fantasma, detecção de coluna sob
-  o dedo) roda em **worklets**, via shared values do Reanimated — nenhum
-  round-trip para o JS thread a cada frame de movimento.
-- Colunas são medidas via `onLayout` + `measureInWindow`; enquanto um card
-  está sendo arrastado, o scroll horizontal (das colunas) e vertical (dentro
-  de cada coluna) fica travado para manter essas medições válidas.
-- Ao soltar: atualização **otimista** do estado local
-  (`setDeals` em `handleDrop`) e chamada a `updateDealStage` (em
-  `src/api/deals.ts`). Se a chamada falhar, a mudança é revertida
-  automaticamente e um toast de erro aparece — troque o corpo de
-  `updateDealStage` pela chamada real ao backend quando o endpoint existir.
-
-## Próximos passos (ver `context.md` para prioridade completa)
+O backlog completo (épicos, tarefas e fases) está organizado no
+[GitHub Project](https://github.com/users/antoniocristovam/projects/1) e nas
+[issues](https://github.com/antoniocristovam/crm-datacrazy/issues) do repo.
+Resumo das próximas fases (ver [`context.md`](./context.md) para a
+justificativa completa de cada prioridade):
 
 1. Plugar API real de deals/leads/conversas no lugar dos mocks.
 2. Multiatendimento offline "de verdade": fila persistida (ex.: SQLite/MMKV)
