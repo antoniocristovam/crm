@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "Datacrazy CRM",
+    "slug": "crm-crazy",
+    "scheme": "datacrazy-crm",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0A0A18",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#0A0A18"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.datacrazy.crm",
+      "userInterfaceStyle": "dark",
+      "infoPlist": {
+        "UIUserInterfaceStyle": "Dark"
+      }
+    },
+    "android": {
+      "package": "com.datacrazy.crm",
+      "userInterfaceStyle": "dark",
+      "adaptiveIcon": {
+        "backgroundColor": "#0A0A18",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0A0A18",
+          "image": "./assets/icon.png",
+          "imageWidth": 160
+        }
+      ]
+    ]
+  }
+}
