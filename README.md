@@ -47,32 +47,52 @@ Pré-requisitos: Node 20+, e o app **Expo Go** no celular (mais rápido para
 testar) ou um simulador iOS (precisa de macOS + Xcode) / emulador Android
 (Android Studio).
 
+O projeto usa só bibliotecas compatíveis com o Expo Go (nenhum módulo nativo
+customizado ainda) — não precisa de build nenhum para testar no dia a dia.
+
 ```bash
 npm install
 npm start
 ```
 
 No terminal do Metro, aperte `a` (Android), `i` (iOS, só em macOS) ou escaneie
-o QR code com o Expo Go. Também dá pra rodar direto:
+o QR code com o app **Expo Go**. Também dá pra rodar direto:
 
 ```bash
-npm run android
-npm run ios
-npm run web   # preview rápido no navegador, útil para revisar layout
+npm run android   # abre no emulador/dispositivo Android via Expo Go
+npm run ios       # abre no simulador iOS via Expo Go (só em macOS)
+npm run web       # preview rápido no navegador, útil para revisar layout
 ```
+
+> Se em algum momento `npm run android`/`ios` reclamar de "No development
+> build installed", é sinal de que alguma dependência instalada exige um
+> dev client customizado (ex.: `expo-dev-client` ou um módulo nativo fora do
+> Expo Go). Rode `npx expo start --go` para forçar o modo Expo Go, ou gere um
+> development build com EAS (veja a seção abaixo).
 
 ## Build nativa (Android e iOS) via EAS
 
-O projeto já tem [`eas.json`](./eas.json) com 3 perfis (`development`,
-`preview`, `production`). Passos para gerar os builds:
+O projeto já tem [`eas.json`](./eas.json) com 2 perfis (`preview`,
+`production`) para gerar builds instaláveis de verdade (fora do Expo Go).
+Não é preciso instalar nada globalmente — dá pra usar `npx eas-cli` direto
+(evita problemas de PATH no Windows quando um `npm install -g` não fica
+visível no PowerShell):
+
+```bash
+npx eas-cli login
+npx eas-cli build:configure   # vincula o projeto à sua conta Expo e grava o projectId em app.json
+```
+
+Se preferir instalar globalmente (aí os comandos viram só `eas ...`):
 
 ```bash
 npm install -g eas-cli
-eas login
-eas build:configure   # vincula o projeto à sua conta Expo e grava o projectId em app.json
 ```
 
-Depois disso:
+Depois de instalar globalmente, feche e abra um novo terminal antes de
+rodar `eas login` — o PowerShell só recarrega o PATH em uma sessão nova.
+
+Depois disso (troque `eas` por `npx eas-cli` se não instalou globalmente):
 
 ```bash
 # APK de teste interno (Android) — não precisa de conta de desenvolvedor
@@ -89,9 +109,13 @@ eas submit --platform ios
 
 Notas:
 
-- Build iOS (mesmo `--profile development` com `simulator: true`) não exige
-  macOS local — a EAS compila na nuvem. Só é necessário Xcode local se for
-  rodar/depurar via `npx expo run:ios` diretamente numa máquina Mac.
+- Build iOS não exige macOS local — a EAS compila na nuvem. Só é necessário
+  Xcode local se for rodar/depurar via `npx expo run:ios` diretamente numa
+  máquina Mac.
+- Se mais pra frente o projeto precisar de um módulo nativo que o Expo Go não
+  suporta, reinstale `expo-dev-client` (`npx expo install expo-dev-client`) e
+  adicione de volta um perfil `development` (`developmentClient: true`) no
+  `eas.json` para gerar um build de desenvolvimento instalável.
 - `applicationId`/`bundleIdentifier` já configurados como `com.datacrazy.crm`
   em [`app.json`](./app.json); ajuste para o identificador real da Datacrazy
   antes de publicar nas lojas.
