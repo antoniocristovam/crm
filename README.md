@@ -21,7 +21,6 @@ o CRM web em métricas, leads e multiatendimento.
 
 [Board do projeto](https://github.com/users/antoniocristovam/projects/1) ·
 [Issues](https://github.com/antoniocristovam/crm-datacrazy/issues) ·
-[Contexto completo](./context.md)
 
 </div>
 
@@ -211,8 +210,8 @@ justificativa completa de cada prioridade):
 
 1. Plugar API real de deals/leads/conversas no lugar dos mocks.
 2. Multiatendimento offline "de verdade": fila persistida (ex.: SQLite/MMKV)
-   + sync incremental + push via FCM/APNs (hoje `ConversationsScreen` só
-   mostra o estado de sincronização).
+   - sync incremental + push via FCM/APNs (hoje `ConversationsScreen` só
+     mostra o estado de sincronização).
 3. Se o volume de cards por coluna crescer muito em produção, trocar a
    `ScrollView` de cada coluna do Kanban por `@shopify/flash-list`.
 4. Automações e Impulsos: hoje são apenas entradas informativas
