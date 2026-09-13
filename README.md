@@ -98,6 +98,3 @@ em `assets/` são placeholders — trocar antes de qualquer publicação real.
 
 Backlog completo (épicos e fases) no
 [GitHub Project](https://github.com/users/antoniocristovam/projects/1).
-Próximos passos, em ordem: API real no lugar dos mocks → fila offline +
-push de verdade no multiatendimento → virtualizar colunas do Kanban com
-`@shopify/flash-list` se crescer muito → telas de Automações/Impulsos.
