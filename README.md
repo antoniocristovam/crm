@@ -18,7 +18,6 @@ versão publicada do CRM Datacrazy.
 
 [Board do projeto](https://github.com/users/antoniocristovam/projects/1) ·
 [Issues](https://github.com/antoniocristovam/crm-datacrazy/issues) ·
-[Contexto completo](./context.md)
 
 </div>
 
