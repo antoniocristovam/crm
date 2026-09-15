@@ -21,10 +21,8 @@ versão publicada do CRM Datacrazy.
 
 </div>
 
-> ⚠️ **Projeto de teste/estudo.** Feito como resposta pessoal ao "Desafio Dev
-> Mobile 2026" da Datacrazy — não é um produto oficial da empresa, não tem
-> backend real (dados mockados) e não deve ser usado em produção. A logo é
-> usada aqui só pra dar contexto ao desafio.
+> Protótipo/arquitetura de teste feito para o "Desafio Dev Mobile 2026" da
+> Datacrazy — dados mockados, sem backend real.
 
 ---
 
