@@ -17,7 +17,7 @@ versão publicada do CRM Datacrazy.
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
 [Board do projeto](https://github.com/users/antoniocristovam/projects/1) ·
-[Issues](https://github.com/antoniocristovam/crm-datacrazy/issues) ·
+[Issues](https://github.com/antoniocristovam/crm/issues) ·
 
 </div>
 
